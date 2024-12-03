@@ -42,10 +42,24 @@
 }
 
 .message-container {
-    width: 100%;
+    width: 80%;
+    /* Set the container to 75% of the width */
+    text-align: left;
+    /* Align the text to the left */
+    padding: 10px;
+    /* Optional: Add some padding inside the container */
+    margin: 5px auto;
+    /* Center the container horizontally */
+
+    /* Optional: Set a background color for better contrast */
+    color: #fff;
+    /* Optional: Ensure text is visible on dark backgrounds */
+    border-radius: 8px;
+    /* Optional: Add rounded corners */
 }
 
 .bot-message {
+    width: 75%;
     float: left;
     padding: 15px 20px;
     margin: 5px;

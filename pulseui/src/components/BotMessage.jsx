@@ -1,38 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 
-export default function BotMessage({ fetchMessage }) {
-  const [isLoading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
-  const [dots, setDots] = useState(""); // State for loading dots animation
+export default function BotMessage({ text, fetchMessage, key }) {
+  const [message, setMessage] = useState("Loading...");
+  const [loading, setLoading] = useState(true);
+  const [dots, setDots] = useState(""); // For loading animation
 
+  // Set up loading dots animation
   useEffect(() => {
-    // Function to load the message
-    async function loadMessage() {
-      const msg = await fetchMessage();
-      setLoading(false);
-      setMessage(msg);
-    }
-    
-    loadMessage();
-
-    // Loading animation with dots
     let dotInterval;
-    if (isLoading) {
+    if (loading) {
       dotInterval = setInterval(() => {
         setDots((prev) => (prev.length === 3 ? "." : prev + "."));
       }, 500); // Update every 500ms
-    } else {
-      clearInterval(dotInterval); // Stop animation once loading is complete
     }
 
-    // Cleanup on unmount or when the component stops loading
-    return () => clearInterval(dotInterval);
-  }, [fetchMessage, isLoading]); // Effect will re-run on fetchMessage or isLoading change
+    return () => clearInterval(dotInterval); // Clean up interval on unmount
+  }, [loading]);
+
+  // Fetch message when component mounts
+  useEffect(() => {
+    const getMessage = async () => {
+      try {
+        const response = await fetchMessage();
+        setMessage(response);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching message:", error);
+        setMessage("Sorry, an error occurred.");
+        setLoading(false);
+      }
+    };
+
+    getMessage();
+  }, [fetchMessage]);
+
+  // Determine what to display
+  const displayContent = loading 
+    ? `Loading${dots}` 
+    : message;
 
   return (
     <div className="message-container">
       <div className="bot-message">
-        {isLoading ? dots : message} {/* Show loading dots or the message */}
+        {displayContent}
       </div>
     </div>
   );
