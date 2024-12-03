@@ -54,7 +54,7 @@ const send = async (text) => {
                 key={messages.length + 2}
                 fetchMessage={async () => {
                     // Making the API call to your FastAPI backend
-                    const apiUrl = process.env.REACT_APP_FAST_API_URL;
+                    const apiUrl = "https://pulseai-1.onrender.com/ask";
                     try {
                         const response = await fetch(apiUrl, {
                             method: 'POST',
